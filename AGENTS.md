@@ -4,7 +4,7 @@ This document captures key architectural decisions, API discoveries, and design 
 
 ## Project Preferences
 
-- **Versioning:** Major version numbers only (1, 2, 3...). No semver.
+- **Versioning:** Semver (`MAJOR.MINOR.PATCH`, e.g. `1.0.0`). Required by hassfest and matches HACS conventions.
 - **Git commits:** Atomic commits. Each commit should be one logical change.
 - **Code style:** Keep it short, simple, easy to read. Prefer DRY but don't over-abstract. Three similar lines is better than a premature abstraction.
 - **No manufacturer attribution:** The device info should not claim Anthropic wrote this integration. They provide the API; the maintainer maintains the code.
@@ -320,40 +320,43 @@ mypy custom_components/hass_claude_usage/
 
 ## Release Process
 
-This project uses **major version numbering only** (1, 2, 3...). No semver.
+This project uses **semver** (`MAJOR.MINOR.PATCH`). Bump rules:
+- **PATCH** (`1.0.0` → `1.0.1`) — bug fixes, no user-visible behaviour change
+- **MINOR** (`1.0.0` → `1.1.0`) — new sensors, new options, additive features
+- **MAJOR** (`1.0.0` → `2.0.0`) — breaking changes (entity IDs, config schema, removed sensors)
 
 ### Creating a Release
 
 1. **Update manifest.json version**:
    ```bash
    # Edit custom_components/hass_claude_usage/manifest.json
-   # Change "version": "2" to "version": "3"
+   # Change "version": "1.0.0" to "version": "1.1.0"
    ```
 
 2. **Commit the version bump**:
    ```bash
    git add custom_components/hass_claude_usage/manifest.json
-   git commit -m "Bump version to 3"
+   git commit -m "Bump version to 1.1.0"
    git push
    ```
 
-3. **Create git tag**:
+3. **Create git tag** (use a `v` prefix on the tag; the manifest stays unprefixed):
    ```bash
-   git tag 3
-   git push origin 3
+   git tag v1.1.0
+   git push origin v1.1.0
    ```
 
 4. **Create GitHub release** (generates release notes automatically from commits):
    ```bash
-   gh release create 3 --title "v3" --generate-notes
+   gh release create v1.1.0 --title "v1.1.0" --generate-notes
    ```
 
 ### HACS Requirements
 
 - HACS requires **GitHub Releases**, not just tags
-- The `version` field in `manifest.json` must match the latest release tag
+- The `version` field in `manifest.json` must match the latest release tag (without the `v` prefix)
 - HACS shows the 5 most recent releases to users during install/upgrade
-- Version must be compatible with AwesomeVersion (simple integers work fine)
+- Version must be compatible with AwesomeVersion; semver is the de facto standard and required by recent hassfest
 
 ## Version History
 
