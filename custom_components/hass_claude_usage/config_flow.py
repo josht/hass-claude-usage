@@ -134,7 +134,7 @@ class ClaudeUsageConfigFlow(ConfigFlow, domain=DOMAIN):
     async def _exchange_code(self, code: str) -> dict[str, Any] | None:
         """Exchange authorization code for tokens."""
         # The code from the callback URL may contain a # separator with state
-        code_parts = code.split("#")
+        code_parts = code.split("#", 1)
         auth_code = code_parts[0]
         state = code_parts[1] if len(code_parts) > 1 else ""
 
