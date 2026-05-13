@@ -139,7 +139,7 @@ class ClaudeUsageConfigFlow(ConfigFlow, domain=DOMAIN):
         state = code_parts[1] if len(code_parts) > 1 else ""
 
         # Always validate state to prevent CSRF; reject if state is missing or mismatched.
-        if not self._state or state != self._state:
+        if not self._state or not secrets.compare_digest(state, self._state):
             _LOGGER.error("OAuth state mismatch or missing - possible CSRF attack")
             return None
 
