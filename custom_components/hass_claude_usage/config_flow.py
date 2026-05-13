@@ -146,7 +146,6 @@ class ClaudeUsageConfigFlow(ConfigFlow, domain=DOMAIN):
         payload = {
             "grant_type": "authorization_code",
             "code": auth_code,
-            "state": state,
             "client_id": OAUTH_CLIENT_ID,
             "redirect_uri": OAUTH_REDIRECT_URI,
             "code_verifier": self._pkce_verifier,
