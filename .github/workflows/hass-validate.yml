@@ -2,9 +2,12 @@ name: Home Assistant Integration Test
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
+  schedule:
+    # Run daily to catch upstream breakage (hassfest rules, HA core changes, HACS).
+    - cron: "0 6 * * *"
 
 jobs:
   validate-hacs:
