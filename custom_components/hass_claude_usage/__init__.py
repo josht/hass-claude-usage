@@ -162,8 +162,12 @@ def _parse_usage(raw: dict[str, Any]) -> dict[str, Any]:
                 elapsed = week_seconds - (reset_dt - now).total_seconds()
                 percent_elapsed = (elapsed / week_seconds) * 100
                 data["week_usage_pace"] = round(utilization - percent_elapsed, 1)
-            except (ValueError, TypeError):
-                pass
+            except (ValueError, TypeError) as err:
+                _LOGGER.debug(
+                    "Could not compute week_usage_pace from reset_time=%r: %s",
+                    reset_time,
+                    err,
+                )
 
     seven_day_sonnet = raw.get("seven_day_sonnet")
     if seven_day_sonnet:
